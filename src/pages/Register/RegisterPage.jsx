@@ -38,8 +38,8 @@ function RegisterPage() {
     // 👤 עדיין לא מילא פרופיל
     user.setIsProfileFilled(false);
 
-    // 🚀 מעבר לאפליקציה
-    navigate("/home");
+    // 🚀 מעבר ל-Dashboard
+    navigate("/");
   };
 
   return (
