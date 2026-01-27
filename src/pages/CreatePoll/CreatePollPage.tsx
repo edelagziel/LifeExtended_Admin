@@ -3,6 +3,7 @@ import "./CreatePollPage.css";
 
 export default function CreatePollPage() {
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [options, setOptions] = useState(["", ""]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -25,11 +26,13 @@ export default function CreatePollPage() {
       // כרגע רק סימולציה — בהמשך API אמיתי
       console.log({
         title,
+        description,
         options: options.filter(Boolean),
       });
 
       setMessage("✅ Poll created successfully");
       setTitle("");
+      setDescription("");
       setOptions(["", ""]);
     } catch (err) {
       setMessage("❌ Failed to create poll");
@@ -48,6 +51,16 @@ export default function CreatePollPage() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Enter poll title"
+        />
+      </label>
+
+      <label>
+        Poll Description
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Enter poll description (optional)"
+          rows={4}
         />
       </label>
 

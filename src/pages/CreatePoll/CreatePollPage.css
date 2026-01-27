@@ -1,3 +1,56 @@
+.create-poll {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.create-poll h1 {
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0 0 32px 0;
+  color: var(--text);
+}
+
+.create-poll label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.create-poll input,
+.create-poll textarea {
+  padding: 14px 16px;
+  font-size: 15px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  transition: all 0.2s ease;
+  font-family: inherit;
+  width: 100%;
+}
+
+.create-poll textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.create-poll input:focus,
+.create-poll textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1);
+}
+
+.create-poll input::placeholder,
+.create-poll textarea::placeholder {
+  color: var(--muted);
+}
+
 .create-poll-page {
   max-width: 1200px;
   margin: 0 auto;
@@ -67,6 +120,67 @@
 }
 
 /* Options */
+.create-poll .options {
+  margin-bottom: 24px;
+}
+
+.create-poll .options h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  color: var(--text);
+}
+
+.create-poll .options input {
+  margin-bottom: 12px;
+}
+
+.create-poll .options button {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.05);
+  border: 2px dashed var(--accent);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.create-poll .options button:hover {
+  background: rgba(var(--accent-rgb), 0.1);
+}
+
+.create-poll > button {
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background: var(--accent);
+  color: white;
+}
+
+.create-poll > button:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: scale(1.02);
+}
+
+.create-poll > button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.create-poll .message {
+  text-align: center;
+  margin-top: 16px;
+  font-weight: 600;
+}
+
 .options-list {
   display: flex;
   flex-direction: column;
