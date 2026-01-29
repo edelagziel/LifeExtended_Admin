@@ -1,19 +1,38 @@
-import { closePoll } from "../../aws/adminApi";
-import { useState } from "react";
+import { useActivePoll, useClosePoll, useDeletePoll } from "../../customHooks/usePolls";
 import "./DashboardPage.css";
 
 export default function DashboardPage() {
-  const [loading, setLoading] = useState(false);
+  const { poll, loading: pollLoading, refetch } = useActivePoll();
+  const { closePoll, loading: closeLoading } = useClosePoll();
+  const { deletePoll, loading: deleteLoading } = useDeletePoll();
 
   const onClose = async () => {
-    setLoading(true);
+    if (!poll) return;
+
     try {
-      await closePoll("main");
+      await closePoll(poll.id);
       alert("Poll closed successfully");
+      refetch(); // Refresh poll data
     } catch {
       alert("Error closing poll");
-    } finally {
-      setLoading(false);
+    }
+  };
+
+  const onDelete = async () => {
+    if (!poll) return;
+
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${poll.title}"? This action cannot be undone.`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await deletePoll(poll.id);
+      alert("Poll deleted successfully");
+      refetch(); // Refresh poll data
+    } catch {
+      alert("Error deleting poll");
     }
   };
 
@@ -30,15 +49,15 @@ export default function DashboardPage() {
           <h2 className="card-title">Quick Stats</h2>
           <div className="stats-grid">
             <div className="stat-item">
-              <div className="stat-value">0</div>
+              <div className="stat-value">{poll ? 1 : 0}</div>
               <div className="stat-label">Active Polls</div>
             </div>
             <div className="stat-item">
-              <div className="stat-value">0</div>
+              <div className="stat-value">{poll?.totalVotes || 0}</div>
               <div className="stat-label">Total Votes</div>
             </div>
             <div className="stat-item">
-              <div className="stat-value">0</div>
+              <div className="stat-value">{poll?.totalVotes || 0}</div>
               <div className="stat-label">Participants</div>
             </div>
           </div>
@@ -47,16 +66,38 @@ export default function DashboardPage() {
         {/* Current Poll Management */}
         <div className="dashboard-card action-card">
           <h2 className="card-title">Current Poll</h2>
-          <p className="card-description">
-            Control the active poll and manage responses
-          </p>
-          <button 
-            className="btn-primary" 
-            disabled={loading} 
-            onClick={onClose}
-          >
-            {loading ? "Closing…" : "Close Current Poll"}
-          </button>
+          {pollLoading ? (
+            <p className="card-description">Loading poll...</p>
+          ) : poll ? (
+            <>
+              <p className="card-description">
+                <strong>{poll.title}</strong>
+                <br />
+                {poll.description}
+              </p>
+              <p className="card-description">
+                Status: <span className={`status-${poll.status}`}>{poll.status}</span>
+              </p>
+              <div className="button-group">
+                <button 
+                  className="btn-primary" 
+                  disabled={closeLoading || deleteLoading || poll.status !== "active"} 
+                  onClick={onClose}
+                >
+                  {closeLoading ? "Closing…" : "Close Poll"}
+                </button>
+                <button 
+                  className="btn-danger" 
+                  disabled={closeLoading || deleteLoading} 
+                  onClick={onDelete}
+                >
+                  {deleteLoading ? "Deleting…" : "Delete Poll"}
+                </button>
+              </div>
+            </>
+          ) : (
+            <p className="card-description">No active poll found</p>
+          )}
         </div>
 
         {/* Recent Activity */}

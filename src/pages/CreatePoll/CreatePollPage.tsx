@@ -1,12 +1,13 @@
 import { useState } from "react";
+import { useCreatePoll } from "../../customHooks/usePolls";
 import "./CreatePollPage.css";
 
 export default function CreatePollPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [options, setOptions] = useState(["", ""]);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  
+  const { createPoll, loading, error, success, reset } = useCreatePoll();
 
   function updateOption(index: number, value: string) {
     const copy = [...options];
@@ -19,25 +20,28 @@ export default function CreatePollPage() {
   }
 
   async function submitPoll() {
-    setLoading(true);
-    setMessage(null);
+    reset();
 
     try {
-      // כרגע רק סימולציה — בהמשך API אמיתי
-      console.log({
+      const pollData: any = {
         title,
-        description,
         options: options.filter(Boolean),
-      });
+      };
+      
+      // Only add description if it has a value
+      if (description.trim()) {
+        pollData.description = description;
+      }
 
-      setMessage("✅ Poll created successfully");
+      await createPoll(pollData);
+
+      // Reset form on success
       setTitle("");
       setDescription("");
       setOptions(["", ""]);
     } catch (err) {
-      setMessage("❌ Failed to create poll");
-    } finally {
-      setLoading(false);
+      // Error is handled by the hook
+      console.error("Failed to create poll:", err);
     }
   }
 
@@ -83,7 +87,8 @@ export default function CreatePollPage() {
         {loading ? "Creating..." : "Create Poll"}
       </button>
 
-      {message && <p className="message">{message}</p>}
+      {success && <p className="message success">✅ Poll created successfully</p>}
+      {error && <p className="message error">❌ {error}</p>}
     </div>
   );
 }

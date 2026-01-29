@@ -89,17 +89,27 @@
   flex-direction: column;
 }
 
-.btn-primary {
+/* Button Group */
+.button-group {
+  display: flex;
+  gap: 12px;
   margin-top: auto;
+}
+
+.btn-primary, .btn-danger {
+  flex: 1;
   padding: 14px 24px;
   font-size: 15px;
   font-weight: 600;
   color: white;
-  background: var(--accent);
   border: none;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--accent);
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -110,6 +120,42 @@
 .btn-primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.btn-danger {
+  background: #dc3545;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #c82333;
+  transform: scale(1.02);
+}
+
+.btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Poll Status */
+.status-active {
+  color: #28a745;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.status-closed {
+  color: #6c757d;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.status-draft {
+  color: #ffc107;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 13px;
 }
 
 /* Activity Card */

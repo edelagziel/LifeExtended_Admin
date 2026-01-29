@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { generateClient } from "aws-amplify/api";
+import type { Poll } from "../../types/poll.types";
 import "./LiveResults.css";
 
 /* ========= GraphQL client ========= */
@@ -21,7 +22,11 @@ type LiveStats = {
   [key: string]: any;
 };
 
-export default function LiveResults() {
+interface LiveResultsProps {
+  poll: Poll;
+}
+
+export default function LiveResults({ poll }: LiveResultsProps) {
   const [data, setData] = useState<LiveStats | null>(null);
   const [status, setStatus] = useState("Connecting…");
 
@@ -49,24 +54,23 @@ export default function LiveResults() {
   }, []);
 
   /* ========= UI ========= */
-  if (!data) {
-    return (
-      <div className="container">
-        <div className="card">
-          <h3>Waiting for live data…</h3>
-          <p>Status: {status}</p>
-        </div>
-      </div>
-    );
-  }
+  // Show poll data even if subscription hasn't connected yet
+  const displayData = data || {
+    statName: poll.title,
+    totalVotes: poll.totalVotes,
+    ...poll.options.reduce((acc, opt) => {
+      acc[opt.text] = opt.votes;
+      return acc;
+    }, {} as Record<string, number>)
+  };
 
-  const { statName, totalVotes, ...choices } = data;
+  const { statName, totalVotes, ...choices } = displayData;
 
   return (
     <div className="container">
       <div className="header">
-        <h1>{statName || "Live Survey Results"}</h1>
-        <p>Total Participants: {totalVotes ?? 0}</p>
+        <h1>{statName || poll.title}</h1>
+        <p>Total Participants: {totalVotes ?? poll.totalVotes ?? 0}</p>
         <span>Status: {status}</span>
       </div>
 
