@@ -32,7 +32,9 @@ export default function LiveResults({ poll }: LiveResultsProps) {
 
   /* ========= Subscribe on mount ========= */
   useEffect(() => {
-    console.log("🔌 Connecting to AppSync subscription...");
+    console.log("Connecting to AppSync subscription...");
+    console.log("Poll data received:", poll);
+    console.log("Poll options:", poll.options);
 
     const sub = (client.graphql({ query: ON_STATS_UPDATED }) as any).subscribe({
       next: ({ data }: any) => {
@@ -58,10 +60,22 @@ export default function LiveResults({ poll }: LiveResultsProps) {
   const displayData = data || {
     statName: poll.title,
     totalVotes: poll.totalVotes,
-    ...poll.options.reduce((acc, opt) => {
-      acc[opt.text] = opt.votes;
-      return acc;
-    }, {} as Record<string, number>)
+    ...(poll.options && Array.isArray(poll.options) 
+      ? poll.options.reduce((acc, opt, index) => {
+          // Smart normalization: handle both string and object formats
+          const optAny = opt as any; // Allow flexible field access
+          const label = typeof opt === 'string' 
+            ? opt 
+            : opt.text || optAny.label || optAny.option || `Option ${index + 1}`;
+          
+          const votes = typeof opt === 'string' 
+            ? 0 
+            : opt.votes || 0;
+          
+          acc[label] = votes;
+          return acc;
+        }, {} as Record<string, number>)
+      : {})
   };
 
   const { statName, totalVotes, ...choices } = displayData;

@@ -16,7 +16,7 @@ export default function AdminNavbar() {
     <header className="admin-navbar">
       <div className="admin-navbar-container">
         <div className="admin-logo">
-          <span className="logo-icon">🧬</span>
+          <span className="logo-icon"></span>
           <span className="logo-text">LifeExtended</span>
           <span className="logo-badge">Admin</span>
         </div>
@@ -24,15 +24,15 @@ export default function AdminNavbar() {
         <div className="navbar-right">
           <nav className="admin-nav-links">
             <NavLink to="/dashboard" className="nav-link" end>
-              <span className="nav-icon">📊</span>
+              <span className="nav-icon"></span>
               Dashboard
             </NavLink>
             <NavLink to="/dashboard/create" className="nav-link">
-              <span className="nav-icon">➕</span>
+              <span className="nav-icon"></span>
               Create Poll
             </NavLink>
             <NavLink to="/dashboard/live" className="nav-link">
-              <span className="nav-icon">🔴</span>
+              <span className="nav-icon"></span>
               Live
             </NavLink>
           </nav>

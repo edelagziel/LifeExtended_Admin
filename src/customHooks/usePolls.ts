@@ -15,6 +15,7 @@ export function useActivePoll() {
     setError(null);
     try {
       const data = await pollService.getActivePoll();
+      // data can be null if no active poll exists
       setPoll(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch poll");
@@ -46,12 +47,15 @@ export function useCreatePoll() {
 
     try {
       const response = await pollService.createPoll(data);
-      if (response.success) {
-        setSuccess(true);
-        return response.data;
-      } else {
-        throw new Error(response.error || "Failed to create poll");
+      
+      // Handle both formats: {success: true, data: poll} or {poll, message}
+      if (response.success === false) {
+        throw new Error(response.error || response.message || "Failed to create poll");
       }
+      
+      setSuccess(true);
+      // Return either response.data or response.poll or the whole response
+      return response.data || (response as any).poll || response;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create poll");
       throw err;
@@ -81,10 +85,14 @@ export function useClosePoll() {
 
     try {
       const response = await pollService.closePoll(pollId);
-      if (!response.success) {
-        throw new Error(response.error || "Failed to close poll");
+      
+      // Handle both formats: {success: true, data: poll} or {poll, message}
+      if (response.success === false) {
+        throw new Error(response.error || response.message || "Failed to close poll");
       }
-      return response.data;
+      
+      // Return either response.data or response.poll or the whole response
+      return response.data || (response as any).poll || response;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to close poll");
       throw err;
@@ -109,8 +117,10 @@ export function useDeletePoll() {
 
     try {
       const response = await pollService.deletePoll(pollId);
-      if (!response.success) {
-        throw new Error(response.error || "Failed to delete poll");
+      
+      // Handle both formats: {success: true} or {message}
+      if (response.success === false) {
+        throw new Error(response.error || response.message || "Failed to delete poll");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete poll");

@@ -87,8 +87,8 @@ export default function CreatePollPage() {
         {loading ? "Creating..." : "Create Poll"}
       </button>
 
-      {success && <p className="message success">✅ Poll created successfully</p>}
-      {error && <p className="message error">❌ {error}</p>}
+      {success && <p className="message success">Poll created successfully</p>}
+      {error && <p className="message error">{error}</p>}
     </div>
   );
 }

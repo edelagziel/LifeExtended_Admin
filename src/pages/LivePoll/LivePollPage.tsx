@@ -10,7 +10,7 @@ export default function LivePollPage() {
       <div className="live-poll-header">
         <div className="header-content">
           <h1 className="page-title">
-            <span className="live-indicator">🔴</span>
+            <span className="live-indicator"></span>
             Live Poll Monitoring
           </h1>
           <p className="page-subtitle">Real-time results and participant activity</p>

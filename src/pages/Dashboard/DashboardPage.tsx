@@ -6,6 +6,9 @@ export default function DashboardPage() {
   const { closePoll, loading: closeLoading } = useClosePoll();
   const { deletePoll, loading: deleteLoading } = useDeletePoll();
 
+  // Case-insensitive check - works with both "ACTIVE" and "active"
+  const isActive = poll?.status?.toUpperCase() === 'ACTIVE';
+
   const onClose = async () => {
     if (!poll) return;
 
@@ -76,12 +79,14 @@ export default function DashboardPage() {
                 {poll.description}
               </p>
               <p className="card-description">
-                Status: <span className={`status-${poll.status}`}>{poll.status}</span>
+                Status: <span className={`status-${poll.status?.toLowerCase()}`}>
+                  {poll.status?.toUpperCase()}
+                </span>
               </p>
               <div className="button-group">
                 <button 
                   className="btn-primary" 
-                  disabled={closeLoading || deleteLoading || poll.status !== "active"} 
+                  disabled={closeLoading || deleteLoading || !isActive} 
                   onClick={onClose}
                 >
                   {closeLoading ? "Closing…" : "Close Poll"}
@@ -105,7 +110,7 @@ export default function DashboardPage() {
           <h2 className="card-title">Recent Activity</h2>
           <div className="activity-list">
             <div className="activity-item">
-              <div className="activity-icon">📊</div>
+              <div className="activity-icon"></div>
               <div className="activity-content">
                 <div className="activity-title">No recent activity</div>
                 <div className="activity-time">Start by creating a poll</div>

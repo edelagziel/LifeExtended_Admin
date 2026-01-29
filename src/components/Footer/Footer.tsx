@@ -11,7 +11,7 @@ export default function Footer() {
     <footer className="app-footer">
       <div className="footer-container">
         <div className="footer-brand">
-          <span className="footer-logo">🧬</span>
+          <span className="footer-logo"></span>
           <span className="footer-text">LifeExtended</span>
         </div>
         
