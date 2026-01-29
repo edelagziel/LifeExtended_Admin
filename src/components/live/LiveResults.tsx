@@ -24,9 +24,10 @@ type LiveStats = {
 
 interface LiveResultsProps {
   poll: Poll;
+  onParticipantsUpdate?: (count: number) => void;
 }
 
-export default function LiveResults({ poll }: LiveResultsProps) {
+export default function LiveResults({ poll, onParticipantsUpdate }: LiveResultsProps) {
   const [data, setData] = useState<LiveStats | null>(null);
   const [status, setStatus] = useState("Connecting…");
 
@@ -42,6 +43,11 @@ export default function LiveResults({ poll }: LiveResultsProps) {
             const parsed = JSON.parse(data.onStatsUpdated.standings);
             setData(parsed);
             setStatus("Live ");
+            
+            // Update parent component with live participant count
+            if (onParticipantsUpdate && parsed.totalVotes !== undefined) {
+              onParticipantsUpdate(parsed.totalVotes);
+            }
           } catch (err) {
             console.error(" JSON parse error", err);
           }

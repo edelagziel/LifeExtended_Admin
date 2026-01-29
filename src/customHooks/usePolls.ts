@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { Poll, CreatePollDTO } from "../types/poll.types";
+import type { Poll, CreatePollDTO, UpdatePollDTO } from "../types/poll.types";
 import * as pollService from "../services/pollService";
 
 /**
@@ -102,6 +102,45 @@ export function useClosePoll() {
   };
 
   return { closePoll, loading, error };
+}
+
+/**
+ * Hook to handle poll update
+ */
+export function useUpdatePoll() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const updatePoll = async (pollId: string, data: UpdatePollDTO) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+      const response = await pollService.updatePoll(pollId, data);
+      
+      // Handle both formats: {success: true, data: poll} or {poll, message}
+      if (response.success === false) {
+        throw new Error(response.error || response.message || "Failed to update poll");
+      }
+      
+      setSuccess(true);
+      return response.data || (response as any).poll || response;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update poll");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const reset = () => {
+    setError(null);
+    setSuccess(false);
+  };
+
+  return { updatePoll, loading, error, success, reset };
 }
 
 /**
