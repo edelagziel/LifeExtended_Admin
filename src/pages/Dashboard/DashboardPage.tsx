@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useActivePoll, useClosePoll, useDeletePoll, useUpdatePoll } from "../../customHooks/usePolls";
+import type { RootState } from "../../store/store";
 import "./DashboardPage.css";
 
 export default function DashboardPage() {
@@ -7,6 +9,7 @@ export default function DashboardPage() {
   const { closePoll, loading: closeLoading } = useClosePoll();
   const { deletePoll, loading: deleteLoading } = useDeletePoll();
   const { updatePoll, loading: updateLoading } = useUpdatePoll();
+  const liveStats = useSelector((state: RootState) => state.poll.liveStats);
 
   // Case-insensitive check - works with both "ACTIVE" and "active"
   const isActive = poll?.status?.toUpperCase() === 'ACTIVE';
@@ -92,7 +95,7 @@ export default function DashboardPage() {
               <div className="stat-label">Active Polls</div>
             </div>
             <div className="stat-item">
-              <div className="stat-value">{poll?.totalVotes || 0}</div>
+              <div className="stat-value">{liveStats?.totalVotes || poll?.totalVotes || 0}</div>
               <div className="stat-label">Participants</div>
             </div>
           </div>

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { generateClient } from "aws-amplify/api";
 import type { Poll } from "../../types/poll.types";
+import type { RootState } from "../../store/store";
+import { updateLiveStats } from "../../store/pollSlice";
 import "./LiveResults.css";
 
 /* ========= GraphQL client ========= */
@@ -28,8 +31,21 @@ interface LiveResultsProps {
 }
 
 export default function LiveResults({ poll, onParticipantsUpdate }: LiveResultsProps) {
+  const dispatch = useDispatch();
+  const liveStats = useSelector((state: RootState) => state.poll.liveStats);
   const [data, setData] = useState<LiveStats | null>(null);
   const [status, setStatus] = useState("Connecting…");
+
+  // Load data from Redux on mount if available
+  useEffect(() => {
+    if (liveStats && !data) {
+      setData({
+        statName: poll.title,
+        totalVotes: liveStats.totalVotes,
+        ...liveStats.standings,
+      });
+    }
+  }, [liveStats, poll.title, data]);
 
   /* ========= Subscribe on mount ========= */
   useEffect(() => {
@@ -43,6 +59,13 @@ export default function LiveResults({ poll, onParticipantsUpdate }: LiveResultsP
             const parsed = JSON.parse(data.onStatsUpdated.standings);
             setData(parsed);
             setStatus("Live ");
+            
+            // Save to Redux for persistence across page navigation
+            const { statName, totalVotes, ...choices } = parsed;
+            dispatch(updateLiveStats({
+              totalVotes: totalVotes || 0,
+              standings: choices,
+            }));
             
             // Update parent component with live participant count
             if (onParticipantsUpdate && parsed.totalVotes !== undefined) {

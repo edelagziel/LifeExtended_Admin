@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useActivePoll } from "../../customHooks/usePolls";
 import LiveResults from "../../components/live/LiveResults";
+import type { RootState } from "../../store/store";
 import "./LivePollPage.css";
 
 export default function LivePollPage() {
   const { poll, loading, error } = useActivePoll();
+  const liveStats = useSelector((state: RootState) => state.poll.liveStats);
   const [liveParticipants, setLiveParticipants] = useState(0);
+
+  // Load participants from Redux when component mounts
+  useEffect(() => {
+    if (liveStats?.totalVotes) {
+      setLiveParticipants(liveStats.totalVotes);
+    }
+  }, [liveStats]);
 
   return (
     <div className="live-poll-page">
