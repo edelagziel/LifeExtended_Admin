@@ -39,7 +39,7 @@ function RegisterPage() {
     user.setIsProfileFilled(false);
 
     // 🚀 מעבר ל-Dashboard
-    navigate("/");
+    navigate("/dashboard");
   };
 
   return (

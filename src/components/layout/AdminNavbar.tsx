@@ -23,15 +23,15 @@ export default function AdminNavbar() {
 
         <div className="navbar-right">
           <nav className="admin-nav-links">
-            <NavLink to="/" className="nav-link" end>
+            <NavLink to="/dashboard" className="nav-link" end>
               <span className="nav-icon">📊</span>
               Dashboard
             </NavLink>
-            <NavLink to="/create" className="nav-link">
+            <NavLink to="/dashboard/create" className="nav-link">
               <span className="nav-icon">➕</span>
               Create Poll
             </NavLink>
-            <NavLink to="/live" className="nav-link">
+            <NavLink to="/dashboard/live" className="nav-link">
               <span className="nav-icon">🔴</span>
               Live
             </NavLink>

@@ -1,9 +1,13 @@
 export async function closePoll(pollId: string) {
+  // השינוי הוא כאן: מחקנו את הדומיין והשארנו רק את הנתיב
   const res = await fetch(
-    "https://dtzmmrctgwvht.cloudfront.net/admin/close-poll",
+    "/admin/close-poll", 
     {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "x-api-key": "da2-p4q37etihjbuhifsro67t3epfm"
+      },
       body: JSON.stringify({ pollId }),
     }
   );

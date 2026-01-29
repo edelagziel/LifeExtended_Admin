@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import AdminLayout from "../components/layout/AdminLayout";
 import DashboardPage from "../pages/Dashboard/DashboardPage";
 import CreatePollPage from "../pages/CreatePoll/CreatePollPage";
@@ -13,6 +13,14 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
+    element: <Navigate to="/register" replace />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
+  },
+  {
+    path: "/dashboard",
     element: <AdminLayout />,
     children: [
       { index: true, element: <DashboardPage /> },
