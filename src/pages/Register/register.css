@@ -66,10 +66,12 @@
   /* Inputs */
   .form-input {
     padding: 11px 14px;
-    font-size: 15px;
+    font-size: 14px;
     border: 1px solid #d1d5db;
     border-radius: 6px;
     background-color: #ffffff;
+    letter-spacing: normal;
+    font-weight: 400;
   }
   
   .form-input:focus {
@@ -80,6 +82,8 @@
   
   .form-input::placeholder {
     color: #9ca3af;
+    letter-spacing: normal;
+    font-weight: 400;
   }
   
   /* Error */

@@ -106,21 +106,22 @@ function RegisterForm({ onSuccess }) {
       return;
     }
 
-    // Simulate async operation (e.g., API call)
+    // Cognito sign up
     setIsSubmitting(true);
 
     try {
-      // TODO: Add actual API call here
-      // Example: await registerUser(formData);
+      const { authSignUp } = await import("../../services/authService");
+      
+      // הרשמה ב-Cognito
+      await authSignUp({
+        email: formData.email,
+        password: formData.password,
+      });
 
-      // Simulate network delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // On success, call the callback
+      // On success, call the callback with email
       if (onSuccess) {
         onSuccess({
           email: formData.email,
-          // Never send password in success callback in real app
         });
       }
 
@@ -133,8 +134,9 @@ function RegisterForm({ onSuccess }) {
       setErrors({});
     } catch (error) {
       // Handle registration error
+      console.error("Registration error:", error);
       setErrors({
-        submit: "Registration failed. Please try again.",
+        submit: error.message || "Registration failed. Please try again.",
       });
     } finally {
       setIsSubmitting(false);

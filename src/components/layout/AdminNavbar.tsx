@@ -1,15 +1,38 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useContext } from "react";
 import { toggleTheme } from "../../store/themeSlice";
 import type { RootState } from "../../store/store";
+import { UserContext } from "../../context/UserContext";
 import "./AdminNavbar.css";
 
 export default function AdminNavbar() {
   const mode = useSelector((state: RootState) => state.theme.mode);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useContext(UserContext);
 
   const handleToggleTheme = () => {
     dispatch(toggleTheme());
+  };
+
+  const handleLogout = async () => {
+    try {
+      const { authSignOut } = await import("../../services/authService");
+      await authSignOut();
+
+      // נקה את ה-UserContext
+      if (user) {
+        user.setIsAuthenticated(false);
+        user.setEmail(null);
+        user.setIsProfileFilled(false);
+      }
+
+      // חזרה למסך התחברות
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   return (
@@ -39,6 +62,10 @@ export default function AdminNavbar() {
 
           <button className="theme-toggle" onClick={handleToggleTheme}>
             {mode === "light" ? "🌙" : "☀️"}
+          </button>
+
+          <button className="logout-button" onClick={handleLogout} title="Logout">
+            🚪 Logout
           </button>
         </div>
       </div>

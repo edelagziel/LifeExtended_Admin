@@ -116,6 +116,33 @@
   transform: scale(0.95);
 }
 
+/* Logout Button */
+.logout-button {
+  padding: 10px 16px;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  border-color: #e74c3c;
+  background: #fee;
+  color: #e74c3c;
+  transform: scale(1.02);
+}
+
+.logout-button:active {
+  transform: scale(0.98);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .admin-navbar-container {
@@ -148,5 +175,10 @@
     width: 40px;
     height: 40px;
     font-size: 18px;
+  }
+
+  .logout-button {
+    padding: 8px 12px;
+    font-size: 13px;
   }
 }
